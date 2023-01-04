@@ -1,0 +1,1 @@
+![](../pictures/state-machine.png)
