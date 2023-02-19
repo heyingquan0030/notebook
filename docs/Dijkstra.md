@@ -159,3 +159,46 @@ public class Solution {
 
 BFS广度优先算法只适用于**有向无权图**的最短路径求解，和N叉树的层序遍历类似（**注：需要用一个数组visited[]记录访问过的点，避免重复访问**）
 
+### 3.Dijkstra算法
+```java
+public class Solution {
+    int weight(int from, int to);
+
+    List<Integer> adj(int s);
+
+    int[] dijkstra(int start, List<Integer>[] graph) {
+        int V = graph.length;
+
+        int[] distTo = new int[V];
+        Arrays.fill(distTo, Integer.MAX_VALUE);
+
+        distTo[start] = 0;
+
+        Queue<State> pq = new PriorityQueue<>((a, b) -> {
+            return a.distFromStart - b.distFromStart;
+        });
+
+        pq.offer(new State(start, 0));
+
+        while (!pq.isEmpty()) {
+            State curState = pq.poll();
+            int curNodeID = curState.id;
+            int curDistFromStart = curState.distFromStart;
+
+            if (curDistFromStart > distTo[curNodeID]) {
+                continue;
+            }
+
+            for (int nextNodeID : adj(curNodeID)) {
+                int distToNextNode = distTo[curNodeID] + weight(curNodeID, nextNodeID);
+
+                if (distTo[nextNodeID] > distToNextNode) {
+                    distTo[nextNodeID] = distToNextNode;
+                    pq.offer(new State(nextNodeID, distToNextNode));
+                }
+            }
+        }
+        return distTo;
+    }
+}
+```
